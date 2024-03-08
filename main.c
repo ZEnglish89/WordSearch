@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 // Declarations of the two functions you will implement
 // Feel free to declare any helper functions or global variables
@@ -55,10 +56,15 @@ int main(int argc, char **argv) {
 }
 
 void printPuzzle(char** arr) {
-	// This function will print out the complete puzzle grid (arr). 
-    // It must produce the output in the SAME format as the samples 
-    // in the instructions.
-    // Your implementation here...
+	for(int i=0;i<bSize;i++){
+		for(int j=0;j<bSize;j++){
+			printf("%c",*(*(arr+i)+j));
+			if(j!=bSize-1){
+				printf(" ");
+			}
+		}
+		printf("\n");
+	}
 
 }
 
