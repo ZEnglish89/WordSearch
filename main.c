@@ -75,4 +75,30 @@ void searchPuzzle(char** arr, char* word) {
     // different message as shown in the sample runs.
     // Your implementation here...
 
+    //find the first letter.
+
+    int length = strlen(word);
+    int row = 0; //first letter row
+    int column = 0; //first letter column
+    word++;//remove the first letter of the word.
+    length--;//length of the word without the letter we removed.
+    searchHelper(arr, word, row, column, length);
+
+    //if the solution array contains the length of the word, print the array.
+    //else print the "we failed" sentence.
+}
+void searchHelper(char** arr, char* word, int row, int column, int length){
+
+    //find the second letter, within the 3x3 of the first letter
+
+    word++;
+    length--;
+    row = 0; //second letter row
+    column = 0; //second letter column
+    searchHelper(arr, word, row, column, length);
+    
+    
+    //Find some way to detect if we've finished the word, and return all the way back up to the top.
+    //Don't return true if you find it, just return the array, and at the end, if the array
+    //doesn't have all the letters, consider it a failure.
 }
