@@ -91,6 +91,34 @@ void searchHelper(char** arr, char* word, int row, int column, int length){
 
     //find the second letter, within the 3x3 of the first letter
 
+    //Here we define our movement pattern  of all 8 possible directions using malloc
+    int r_move = (int*)malloc(8 * sizeof(int));
+    int c_move = (int*)malloc(8 * sizeof(int));
+
+    *(r_move + 0) = -1; *(c_move + 0) = -1;
+    *(r_move + 1) = -1; *(c_move + 1) = 0;
+    *(r_move + 2) = -1; *(c_move + 2) = 1;
+    *(r_move + 3) = 0; *(c_move + 3) = -1;
+    *(r_move + 4) = 0; *(c_move + 4) = 1;
+    *(r_move + 5) = 1; *(c_move + 5) = -1;
+    *(r_move + 6) = 1; *(c_move + 6) = 0;
+    *(r_move + 7) = 1; *(c_move + 7) = 1;
+
+    int WordFound = 0;
+
+//The next two loops create an index that goes through each possible direction that the next letter can be in
+    // for (int i = 0; i < 8; i++){
+    //     int r_index = row;
+    //     int c_index = column;
+    //     for (int j = 0; j < length; j++){
+    //         r_index  = r_index + *(r_move + i);
+    //         c_index = c_index + *(c_move + i);
+    //     }
+    // }
+
+    //
+
+
     word++;
     length--;
     row = 0; //second letter row
