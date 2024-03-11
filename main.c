@@ -80,6 +80,17 @@ void searchPuzzle(char** arr, char* word) {
     int length = strlen(word);
     int row = 0; //first letter row
     int column = 0; //first letter column
+    
+    for(int i=0;i<bSize;i++){
+        for(int j=0;j<bSize;j++){
+            if(*(*(arr+i)+j)==*(word)){
+                row=i;
+                column=j;
+            }
+        }
+    }
+
+    printf("Row: %d Column: %d\n",row,column);//To test if the first word has been found correctly.
     word++;//remove the first letter of the word.
     length--;//length of the word without the letter we removed.
     searchHelper(arr, word, row, column, length);
