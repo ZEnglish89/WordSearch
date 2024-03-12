@@ -92,9 +92,13 @@ void searchPuzzle(char** arr, char* word) {
             if(*(*(arr+i)+j)==*(word)){
                 row=i;
                 column=j;
+                //Replace i and j above with searchHelper function
+                //searchHelper(arr, word, i, j, length);
+                
             }
         }
     }
+
 
     printf("Row: %d Column: %d\n",row,column);//To test if the first word has been found correctly.
     word++;//remove the first letter of the word.
@@ -106,35 +110,38 @@ void searchPuzzle(char** arr, char* word) {
     //else print the "we failed" sentence.
 }
 void searchHelper(char** arr, char* word, int row, int column, int length){
-/*
+
     //find the second letter, within the 3x3 of the first letter
-
     //Here we define our movement pattern  of all 8 possible directions using malloc
-    int r_move = (int*)malloc(8 * sizeof(int));
-    int c_move = (int*)malloc(8 * sizeof(int));
+/*    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            if (*word == *(*(arr + i + row) + j + col))
+            {
+                //letter found
+                //Call searchHelper(char** arr, char* word, int row + i, int column + j, int length))
+            }
+            // if (*word == *(*(arr + row - i) + col -j)){
+                //letter found
+                ////Call searchHelper(char** arr, char* word, int row - i, int column - j, int length))
+            //}
 
-    *(r_move + 0) = -1; *(c_move + 0) = -1;
-    *(r_move + 1) = -1; *(c_move + 1) = 0;
-    *(r_move + 2) = -1; *(c_move + 2) = 1;
-    *(r_move + 3) = 0; *(c_move + 3) = -1;
-    *(r_move + 4) = 0; *(c_move + 4) = 1;
-    *(r_move + 5) = 1; *(c_move + 5) = -1;
-    *(r_move + 6) = 1; *(c_move + 6) = 0;
-    *(r_move + 7) = 1; *(c_move + 7) = 1;
+            }
+           
+            
+            
+        }
+        
+    }
+    //if (row + 1 && col + 1){
 
-    int WordFound = 0;
+    //}
+    //if (row + 1 && col - 1){
+*/
 
-//The next two loops create an index that goes through each possible direction that the next letter can be in
-    // for (int i = 0; i < 8; i++){
-    //     int r_index = row;
-    //     int c_index = column;
-    //     for (int j = 0; j < length; j++){
-    //         r_index  = r_index + *(r_move + i);
-    //         c_index = c_index + *(c_move + i);
-    //     }
-    // }
 
-    //
+
 
 
     word++;
@@ -147,5 +154,5 @@ void searchHelper(char** arr, char* word, int row, int column, int length){
     //Find some way to detect if we've finished the word, and return all the way back up to the top.
     //Don't return true if you find it, just return the array, and at the end, if the array
     //doesn't have all the letters, consider it a failure.
-*/
+
 }
