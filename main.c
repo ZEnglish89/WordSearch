@@ -78,6 +78,12 @@ void searchPuzzle(char** arr, char* word) {
     //find the first letter.
 
     int length = strlen(word);
+
+    for(int i=0;i<length;i++){ //loop through every letter of the word.
+        if(*(word+i)>96&&*(word+i)<123){ //if the current character is a lowercase letter:
+            *(word+i)-=32; //capitalize it.
+        }
+    }
     int row = 0; //first letter row
     int column = 0; //first letter column
     
@@ -94,12 +100,13 @@ void searchPuzzle(char** arr, char* word) {
     word++;//remove the first letter of the word.
     length--;//length of the word without the letter we removed.
     searchHelper(arr, word, row, column, length);
-
+    //This current implementation will be specifically finding the LAST instance of the target word. In order to find the first/all of them,
+    //We'll need to move the searchhelper() call inside the above for loop, among some other changes.
     //if the solution array contains the length of the word, print the array.
     //else print the "we failed" sentence.
 }
 void searchHelper(char** arr, char* word, int row, int column, int length){
-
+/*
     //find the second letter, within the 3x3 of the first letter
 
     //Here we define our movement pattern  of all 8 possible directions using malloc
@@ -140,4 +147,5 @@ void searchHelper(char** arr, char* word, int row, int column, int length){
     //Find some way to detect if we've finished the word, and return all the way back up to the top.
     //Don't return true if you find it, just return the array, and at the end, if the array
     //doesn't have all the letters, consider it a failure.
+*/
 }
