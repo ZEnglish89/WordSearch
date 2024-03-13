@@ -7,6 +7,7 @@
 // Feel free to declare any helper functions or global variables
 void printPuzzle(char** arr);
 void searchPuzzle(char** arr, char* word);
+void searchHelper(char** arr, char* word, int row, int column, int length);
 int bSize;
 
 // Main function, DO NOT MODIFY 	
@@ -90,32 +91,46 @@ void searchPuzzle(char** arr, char* word) {
     for(int i=0;i<bSize;i++){
         for(int j=0;j<bSize;j++){
             if(*(*(arr+i)+j)==*(word)){
-                row=i;
-                column=j;
-                //Replace i and j above with searchHelper function
-                //searchHelper(arr, word, i, j, length);
-                
+                searchHelper(arr,word+1,i,j,length-1); //variable changes made in passing so as not to interfere with their actual values.
             }
         }
     }
 
 
-    printf("Row: %d Column: %d\n",row,column);//To test if the first word has been found correctly.
-    word++;//remove the first letter of the word.
-    length--;//length of the word without the letter we removed.
-    searchHelper(arr, word, row, column, length);
-    //This current implementation will be specifically finding the LAST instance of the target word. In order to find the first/all of them,
-    //We'll need to move the searchhelper() call inside the above for loop, among some other changes.
+    //The above for loop is now finding every instance of the first letter of the word, and calling searchHelper on all of them, in order.
     //if the solution array contains the length of the word, print the array.
     //else print the "we failed" sentence.
 }
 void searchHelper(char** arr, char* word, int row, int column, int length){
-
+    int top,bottom,left,right;
     //find the second letter, within the 3x3 of the first letter
     //Here we define our movement pattern  of all 8 possible directions using malloc
-/*    for (int i = 0; i < 2; i++)
+    if(row>0){
+        top=-1;
+    }
+    else
+        top=0;
+    if(row<bSize-1){
+        bottom=1;
+    }
+    else
+        bottom=0;
+    if(column>0){
+        left=-1;
+    }
+    else
+        left=0;
+    if(column<bSize-1){
+        right=1;
+    }
+    else
+        right=0;
+        //this setup for the loops will check the valid slots, without any chance of wraparound.
+    //For example: If the letter is on the leftmost column, trying to go left will wrap around to the right side of the previous row. Those if statements might not be the most
+    //efficient way to set the values, but setting the values prevents wraparound.
+/*    for (int i = top; i <= bottom; i++)
     {
-        for (int j = 0; j < 2; j++)
+        for (int j = left; j <= right; j++)
         {
             if (*word == *(*(arr + i + row) + j + col))
             {
