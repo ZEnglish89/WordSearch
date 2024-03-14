@@ -9,6 +9,8 @@ void printPuzzle(char** arr);
 void searchPuzzle(char** arr, char* word);
 void searchHelper(char** arr, char* word, int row, int column, int length);
 int bSize;
+int** results;
+int startingLength;
 
 // Main function, DO NOT MODIFY 	
 int main(int argc, char **argv) {
@@ -78,8 +80,14 @@ void searchPuzzle(char** arr, char* word) {
 
     //find the first letter.
 
-    int length = strlen(word);
-
+    startingLength = strlen(word);
+    int length = startingLength;
+    results = (int**)malloc(length*sizeof(int*)); //Array of int arrays, of the same length as the word being searched. Each int array corresponds to a coordinate pair.
+    for(int i-0;i<length;i++){
+        *(results+i) = (int*)malloc(2*sizeof(int));
+        *(*(results+i))=-1;
+        *(*(results+i)+1)=-1;
+    } //initialize everything to -1, a number which does not exist within the grid, so we can tell if each element has been modified or not.
     for(int i=0;i<length;i++){ //loop through every letter of the word.
         if(*(word+i)>96&&*(word+i)<123){ //if the current character is a lowercase letter:
             *(word+i)-=32; //capitalize it.
@@ -91,6 +99,8 @@ void searchPuzzle(char** arr, char* word) {
     for(int i=0;i<bSize;i++){
         for(int j=0;j<bSize;j++){
             if(*(*(arr+i)+j)==*(word)){
+                *(*(results))=i;
+                *(*(results)+1)=j;
                 searchHelper(arr,word+1,i,j,length-1); //variable changes made in passing so as not to interfere with their actual values.
             }
         }
@@ -128,7 +138,8 @@ void searchHelper(char** arr, char* word, int row, int column, int length){
         //this setup for the loops will check the valid slots, without any chance of wraparound.
     //For example: If the letter is on the leftmost column, trying to go left will wrap around to the right side of the previous row. Those if statements might not be the most
     //efficient way to set the values, but setting the values prevents wraparound.
-/*    for (int i = top; i <= bottom; i++)
+/*
+    for (int i = top; i <= bottom; i++)
     {
         for (int j = left; j <= right; j++)
         {
@@ -154,8 +165,29 @@ void searchHelper(char** arr, char* word, int row, int column, int length){
     //}
     //if (row + 1 && col - 1){
 */
+    for (int i = top; i <= bottom; i++)
+    {
+        for (int j = left; j <= right; j++)
+        {
+            if (*word == *(*(arr + i + row) + j + col)&&!(i==row&&j=column))
+            {
+                *(*(results+(startingLength-length)))=row+i;
+                *(*(results+(startingLength-length))+1)=column+j;
+                if(length>1){
+                    searchHelper(char** arr, char* word+1, int row + i, int column + j, int length-1))
+                }
+                else{
+                    //write to the results array to be printed.
+                    i=5;
+                    j=5;
+                    //this will stop both loops from continuing, while a "break" statement would only break out of the inner one.
+                }
+            }
 
-
+        }
+    }
+}
+/*
 
 
 
@@ -171,3 +203,4 @@ void searchHelper(char** arr, char* word, int row, int column, int length){
     //doesn't have all the letters, consider it a failure.
 
 }
+*/
