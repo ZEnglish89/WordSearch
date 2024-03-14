@@ -8,10 +8,11 @@
 // Feel free to declare any helper functions or global variables
 void printPuzzle(char** arr);
 void searchPuzzle(char** arr, char* word);
-void searchHelper(char** arr, char* word, int row, int column, int length);
+bool searchHelper(char** arr, char* word, int row, int column, int length);
 int bSize;
 int** results;
 int startingLength;
+char*** output;
 
 // Main function, DO NOT MODIFY 	
 int main(int argc, char **argv) {
@@ -72,6 +73,32 @@ void printPuzzle(char** arr) {
 
 }
 
+void printResult(char*** out){
+    for(int i=0;i<bSize;i++){
+        for(int j=0;j<bSize;j++){
+            //printf("hi i'm here");
+            printf("%s",*(*(out+i)+j));
+        }
+        printf("\n");
+    }
+}
+
+void writeResult(int** res){
+    for(int i=startingLength-1;i>=0;i--){
+        if(*(*(res+i))!=-1){
+            int row=*(*(res+i));
+            int column=*(*(res+i)+1);
+            int j=0;
+            while(*(*(*(output+row)+column)+j)!='0'&&*(*(*(output+row)+column)+j)!=' '){
+                j++;
+            }
+//            printf("%c\n",*(*(*(output+row)+column)+j));
+            *(*(*(output+row)+column)+j) = (i+1)+'0';
+//            printf("%c\n",*(*(*(output+row)+column)+j));
+        }
+    }
+}
+
 void searchPuzzle(char** arr, char* word) {
     // This function checks if arr contains the search word. If the 
     // word appears in arr, it will print out a message and the path 
@@ -80,11 +107,26 @@ void searchPuzzle(char** arr, char* word) {
     // Your implementation here...
 
     //find the first letter.
+    bool successever=false;
+    bool successnow=false;
+    output = (char***)malloc((bSize)*sizeof(char**));
+    for(int i=0;i<bSize;i++){
+        *(output+i)=(char**)malloc((bSize)*sizeof(char*));
+        for(int j=0;j<bSize;j++){
+            *(*(output+i)+j)=(char*)malloc(7);
+            *(*(*(output+i)+j))='0';
+            for(int k=1;k<6;k++){
+                *(*(*(output+i)+j)+k)=' ';
+            }
+            *(*(*(output+i)+j)+6)='\0';
 
+        }
+    }
+//    printResult(output);
     startingLength = strlen(word);
     int length = startingLength;
     results = (int**)malloc(length*sizeof(int*)); //Array of int arrays, of the same length as the word being searched. Each int array corresponds to a coordinate pair.
-    for(int i-0;i<length;i++){
+    for(int i=0;i<length;i++){
         *(results+i) = (int*)malloc(2*sizeof(int));
         *(*(results+i))=-1;
         *(*(results+i)+1)=-1;
@@ -102,9 +144,20 @@ void searchPuzzle(char** arr, char* word) {
             if(*(*(arr+i)+j)==*(word)){
                 *(*(results))=i;
                 *(*(results)+1)=j;
-                searchHelper(arr,word+1,i,j,length-1); //variable changes made in passing so as not to interfere with their actual values.
+                successnow = searchHelper(arr,word+1,i,j,length-1); //variable changes made in passing so as not to interfere with their actual values.
+                if(successnow){
+                    successever=true;
+                }
             }
         }
+    }
+    if(successever){
+        printf("Word found!\n");
+        printf("Printing the search path:\n");
+        printResult(output);
+    }
+    else{
+        printf("Word not found!\n");
     }
 
 
@@ -171,18 +224,18 @@ bool searchHelper(char** arr, char* word, int row, int column, int length){
     {
         for (int j = left; j <= right; j++)
         {
-            if (*word == *(*(arr + i + row) + j + col)&&!(i==row&&j=column))
+            if (*word == *(*(arr + i + row) + j + column)&&!(i==0&&j==0))
             {
                 *(*(results+(startingLength-length)))=row+i;
                 *(*(results+(startingLength-length))+1)=column+j;
                 if(length>1){
-                    found=searchHelper(char** arr, char* word+1, int row + i, int column + j, int length-1);
+                    found=searchHelper(arr,word+1,row + i,column + j,length-1);
                     if(found){
                         return true;
                     }
                 }
                 else{
-                    //write to the results array to be printed.
+                    writeResult(results);
                     return true;
                     //this will stop both loops from continuing, while a "break" statement would only break out of the inner one.
                 }
