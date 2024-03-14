@@ -76,7 +76,6 @@ void printPuzzle(char** arr) {
 void printResult(char*** out){
     for(int i=0;i<bSize;i++){
         for(int j=0;j<bSize;j++){
-            //printf("hi i'm here");
             printf("%s",*(*(out+i)+j));
         }
         printf("\n");
@@ -92,9 +91,7 @@ void writeResult(int** res){
             while(*(*(*(output+row)+column)+j)!='0'&&*(*(*(output+row)+column)+j)!=' '){
                 j++;
             }
-//            printf("%c\n",*(*(*(output+row)+column)+j));
             *(*(*(output+row)+column)+j) = (i+1)+'0';
-//            printf("%c\n",*(*(*(output+row)+column)+j));
         }
     }
 }
@@ -109,7 +106,9 @@ void searchPuzzle(char** arr, char* word) {
     //find the first letter.
     bool successever=false;
     bool successnow=false;
+    
     output = (char***)malloc((bSize)*sizeof(char**));
+    
     for(int i=0;i<bSize;i++){
         *(output+i)=(char**)malloc((bSize)*sizeof(char*));
         for(int j=0;j<bSize;j++){
@@ -122,9 +121,10 @@ void searchPuzzle(char** arr, char* word) {
 
         }
     }
-//    printResult(output);
+
     startingLength = strlen(word);
     int length = startingLength;
+    
     results = (int**)malloc(length*sizeof(int*)); //Array of int arrays, of the same length as the word being searched. Each int array corresponds to a coordinate pair.
     for(int i=0;i<length;i++){
         *(results+i) = (int*)malloc(2*sizeof(int));
@@ -136,6 +136,7 @@ void searchPuzzle(char** arr, char* word) {
             *(word+i)-=32; //capitalize it.
         }
     }
+    
     int row = 0; //first letter row
     int column = 0; //first letter column
     
@@ -144,6 +145,10 @@ void searchPuzzle(char** arr, char* word) {
             if(*(*(arr+i)+j)==*(word)){
                 *(*(results))=i;
                 *(*(results)+1)=j;
+                if(startingLength==1){
+                    successever=true;
+                    writeResult(results);
+                }
                 successnow = searchHelper(arr,word+1,i,j,length-1); //variable changes made in passing so as not to interfere with their actual values.
                 if(successnow){
                     successever=true;
@@ -151,8 +156,9 @@ void searchPuzzle(char** arr, char* word) {
             }
         }
     }
+
     if(successever){
-        printf("Word found!\n");
+        printf("\nWord found!\n");
         printf("Printing the search path:\n");
         printResult(output);
     }
@@ -193,33 +199,7 @@ bool searchHelper(char** arr, char* word, int row, int column, int length){
     //For example: If the letter is on the leftmost column, trying to go left will wrap around to the right side of the previous row. Those if statements might not be the most
     //efficient way to set the values, but setting the values prevents wraparound.
     bool found=false;
-/*
-    for (int i = top; i <= bottom; i++)
-    {
-        for (int j = left; j <= right; j++)
-        {
-            if (*word == *(*(arr + i + row) + j + col))
-            {
-                //letter found
-                //Call searchHelper(char** arr, char* word, int row + i, int column + j, int length))
-            }
-            // if (*word == *(*(arr + row - i) + col -j)){
-                //letter found
-                ////Call searchHelper(char** arr, char* word, int row - i, int column - j, int length))
-            //}
 
-            }
-           
-            
-            
-        }
-        
-    }
-    //if (row + 1 && col + 1){
-
-    //}
-    //if (row + 1 && col - 1){
-*/
     for (int i = top; i <= bottom; i++)
     {
         for (int j = left; j <= right; j++)
@@ -237,7 +217,6 @@ bool searchHelper(char** arr, char* word, int row, int column, int length){
                 else{
                     writeResult(results);
                     return true;
-                    //this will stop both loops from continuing, while a "break" statement would only break out of the inner one.
                 }
             }
 
@@ -245,20 +224,3 @@ bool searchHelper(char** arr, char* word, int row, int column, int length){
     }
     return false;
 }
-/*
-
-
-
-    word++;
-    length--;
-    row = 0; //second letter row
-    column = 0; //second letter column
-    searchHelper(arr, word, row, column, length);
-    
-    
-    //Find some way to detect if we've finished the word, and return all the way back up to the top.
-    //Don't return true if you find it, just return the array, and at the end, if the array
-    //doesn't have all the letters, consider it a failure.
-
-}
-*/
