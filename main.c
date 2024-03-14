@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <stdbool.h>
 
 // Declarations of the two functions you will implement
 // Feel free to declare any helper functions or global variables
@@ -111,7 +112,7 @@ void searchPuzzle(char** arr, char* word) {
     //if the solution array contains the length of the word, print the array.
     //else print the "we failed" sentence.
 }
-void searchHelper(char** arr, char* word, int row, int column, int length){
+bool searchHelper(char** arr, char* word, int row, int column, int length){
     int top,bottom,left,right;
     //find the second letter, within the 3x3 of the first letter
     //Here we define our movement pattern  of all 8 possible directions using malloc
@@ -138,6 +139,7 @@ void searchHelper(char** arr, char* word, int row, int column, int length){
         //this setup for the loops will check the valid slots, without any chance of wraparound.
     //For example: If the letter is on the leftmost column, trying to go left will wrap around to the right side of the previous row. Those if statements might not be the most
     //efficient way to set the values, but setting the values prevents wraparound.
+    bool found=false;
 /*
     for (int i = top; i <= bottom; i++)
     {
@@ -174,18 +176,21 @@ void searchHelper(char** arr, char* word, int row, int column, int length){
                 *(*(results+(startingLength-length)))=row+i;
                 *(*(results+(startingLength-length))+1)=column+j;
                 if(length>1){
-                    searchHelper(char** arr, char* word+1, int row + i, int column + j, int length-1))
+                    found=searchHelper(char** arr, char* word+1, int row + i, int column + j, int length-1);
+                    if(found){
+                        return true;
+                    }
                 }
                 else{
                     //write to the results array to be printed.
-                    i=5;
-                    j=5;
+                    return true;
                     //this will stop both loops from continuing, while a "break" statement would only break out of the inner one.
                 }
             }
 
         }
     }
+    return false;
 }
 /*
 
