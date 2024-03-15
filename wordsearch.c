@@ -73,7 +73,7 @@ void printPuzzle(char** arr) {
 
 }
 
-void printResult(char*** out){
+void printResult(char*** out){//separate from printPuzzle because this needs to handle strings, not chars.
     for(int i=0;i<bSize;i++){
         for(int j=0;j<bSize;j++){
             printf("%s",*(*(out+i)+j));
@@ -91,8 +91,8 @@ void writeResult(int** res){
             while(*(*(*(output+row)+column)+j)!='0'&&*(*(*(output+row)+column)+j)!=' '){
                 j++;
             }
-            *(*(*(output+row)+column)+j) = (i+1)+'0';
-        }
+            *(*(*(output+row)+column)+j) = (i+1)+'0'; //write the first available character in the string at each letter's position to be equal to that letter's order in the word.
+        }//triple pointers really are something to work with.
     }
 }
 
@@ -120,9 +120,9 @@ void searchPuzzle(char** arr, char* word) {
             *(*(*(output+i)+j)+6)='\0';
 
         }
-    }
+    }//Array of strings, this will be our output.
 
-    startingLength = strlen(word);
+    startingLength = strlen(word); //So that we will have the starting length to refer to later.
     int length = startingLength;
     
     results = (int**)malloc(length*sizeof(int*)); //Array of int arrays, of the same length as the word being searched. Each int array corresponds to a coordinate pair.
@@ -131,25 +131,25 @@ void searchPuzzle(char** arr, char* word) {
         *(*(results+i))=-1;
         *(*(results+i)+1)=-1;
     } //initialize everything to -1, a number which does not exist within the grid, so we can tell if each element has been modified or not.
+
+
     for(int i=0;i<length;i++){ //loop through every letter of the word.
         if(*(word+i)>96&&*(word+i)<123){ //if the current character is a lowercase letter:
             *(word+i)-=32; //capitalize it.
         }
     }
     
-    int row = 0; //first letter row
-    int column = 0; //first letter column
     
     for(int i=0;i<bSize;i++){
         for(int j=0;j<bSize;j++){
-            if(*(*(arr+i)+j)==*(word)){
+            if(*(*(arr+i)+j)==*(word)){ //"if we found the letter"
                 *(*(results))=i;
                 *(*(results)+1)=j;
-                if(startingLength==1){
+                if(startingLength==1){ //to catch the edge case of one-letter words, not sure if we're supposed to search for those or not but figured we might as well.
                     successever=true;
                     writeResult(results);
                 }
-                successnow = searchHelper(arr,word+1,i,j,length-1); //variable changes made in passing so as not to interfere with their actual values.
+                successnow = searchHelper(arr,word+1,i,j,length-1); //variable changes made in passing so as not to interfere with their actual values. Moves word to the next letter and modifies length to show that one letter has already been found.
                 if(successnow){
                     successever=true;
                 }
@@ -163,7 +163,7 @@ void searchPuzzle(char** arr, char* word) {
         printResult(output);
     }
     else{
-        printf("Word not found!\n");
+        printf("\nWord not found!\n");
     }
 
 
@@ -174,7 +174,6 @@ void searchPuzzle(char** arr, char* word) {
 bool searchHelper(char** arr, char* word, int row, int column, int length){
     int top,bottom,left,right;
     //find the second letter, within the 3x3 of the first letter
-    //Here we define our movement pattern  of all 8 possible directions using malloc
     if(row>0){
         top=-1;
     }
@@ -204,17 +203,17 @@ bool searchHelper(char** arr, char* word, int row, int column, int length){
     {
         for (int j = left; j <= right; j++)
         {
-            if (*word == *(*(arr + i + row) + j + column)&&!(i==0&&j==0))
+            if (*word == *(*(arr + i + row) + j + column)&&!(i==0&&j==0))//the second test prevents the same letter from being used twice in a row.
             {
                 *(*(results+(startingLength-length)))=row+i;
                 *(*(results+(startingLength-length))+1)=column+j;
-                if(length>1){
+                if(length>1){ //if this is not the final letter, keep going.
                     found=searchHelper(arr,word+1,row + i,column + j,length-1);
                     if(found){
-                        return true;
+                        return true; //if this path found the word, don't try any other paths from the same letter, just move on.
                     }
                 }
-                else{
+                else{ //if this is the final letter, write the results and tell the previous letters that you found it.
                     writeResult(results);
                     return true;
                 }
